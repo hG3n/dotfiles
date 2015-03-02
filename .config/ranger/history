@@ -1,0 +1,15 @@
+rename .config
+shell 
+find vim
+mkdir gist.vim
+mkdir gist
+find zsh
+mkdir src
+rename reviews.js
+rename d3
+mkdir aws-sdk
+mkdir numerik14
+mkdir numerik
+mkdir foo
+qq
+delete

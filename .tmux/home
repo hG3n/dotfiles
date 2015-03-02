@@ -1,0 +1,5 @@
+select-pane     -t  0   'ranger'                      # select pane 0
+split-window    -v  50
+select-pane     -t  1
+split-window    -h  50  'htop'
+select-pane     -t  0

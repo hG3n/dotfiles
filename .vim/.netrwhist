@@ -1,0 +1,9 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =7
+let g:netrw_dirhist_1='/Users/hagen/Desktop/SHINE Weather.theme/JavaScript'
+let g:netrw_dirhist_2='/Users/hGen/Desktop/beleg_6/tex'
+let g:netrw_dirhist_3='/Users/hGen/.zsh/lib'
+let g:netrw_dirhist_4='/Users/hGen/.zsh/plugins/gnu-utils'
+let g:netrw_dirhist_5='/Users/hGen/Documents/Uni/2. Semester/programmiersprachen/übungen/uebungen_recap/UnitTest++'
+let g:netrw_dirhist_6='/.MobileBackups'
+let g:netrw_dirhist_7='/Users/hGen/.zsh/lib'
