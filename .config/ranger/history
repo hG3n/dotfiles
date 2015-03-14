@@ -1,5 +1,4 @@
 rename .config
-shell 
 find vim
 mkdir gist.vim
 mkdir gist
@@ -11,5 +10,12 @@ mkdir aws-sdk
 mkdir numerik14
 mkdir numerik
 mkdir foo
+rename 
+rename Dia.app
+cd 
+set_option 
+terminal 
+shell 
+deletey
 qq
 delete

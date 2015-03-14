@@ -10,9 +10,6 @@
     # path settings
     export PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/X11/bin:/usr/local/git/bin:/usr/local/MacGPG2/bin:/usr/texbin:/usr/local/Cellar:
 
-    # fink project settings
-    . /sw/bin/init.sh
-
     # default editor
     export EDITOR=vim
 
