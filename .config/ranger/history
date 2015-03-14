@@ -17,5 +17,6 @@ set_option
 terminal 
 shell 
 deletey
-qq
+rename monokai_2.vim
 delete
+qq

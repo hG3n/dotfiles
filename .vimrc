@@ -2,6 +2,10 @@
 "--- GENERAL  SETTINGS ---"
 """""""""""""""""""""""""""
 scriptencoding utf-8
+set enc=utf-8
+set fileencoding=utf-8
+set fileencodings=ucs-bom,utf8,prc
+
 set backspace=indent,eol,start "in case bcksp isnt working well"
 set nocompatible        "changes options as as sideeffect"
 set shiftwidth=2
@@ -10,7 +14,7 @@ set ruler               "always show actual position"
 set nu                  "side indexnunbers" 
 set history=1000
 set undolevels=1000
-set noswapfile          "disable creating .swp files"
+set noswapfile          "disable creating stupid .swp files"
 set autoindent
 set title               "sets filename on top of the open window"
 set wildmenu            "sets the autocomplete in commandline"
@@ -40,6 +44,10 @@ set foldlevel=1
 "enables syntax detection"
 syntax on
 
+"colorscheme"
+set t_Co=256
+colorscheme monokai
+
 "Stupid shift key fixes"
 cmap X      x
 cmap W      w
@@ -54,6 +62,61 @@ cmap ww     w!
 "Yank from the cursor to the end of the line, to be consistent with C and D"
 nnoremap Y y$
 
+"""""""""""""""""""""""
+"--- !! VUNDLE !! --- "
+"""""""""""""""""""""""
+set rtp+=~/.vim/bundle/vundle
+
+call vundle#begin()
+  Plugin 'gmarik/vundle'
+  Plugin 'shougo/neocomplete'
+  Plugin 'bling/vim-airline'
+  Plugin 'sjl/gundo.vim'
+  Plugin 'tpope/vim-fugitive'
+  Plugin 'scrooloose/syntastic'
+  Plugin 'Yggdroot/indentLine'
+  Plugin 'vim-scripts/SearchComplete'
+  Plugin 'scrooloose/nerdtree'
+call vundle#end()
+
+filetype plugin indent on
+
+"""""""""""""""""""""""
+"--- CONFIG FILES  ---"
+"""""""""""""""""""""""
+" using external files to keep an overview on that file
+" neocomplete settings length sucks, airline as well
+source ~/.vim/configs/airline.conf.vim
+source ~/.vim/configs/neocomplete.conf.vim
+
+"""""""""""""""""""
+"--- SYNTASTIC ---"
+"""""""""""""""""""
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+"""""""""""""""""""
+"--- NERDTREE  ---"
+"""""""""""""""""""
+let g:indentLine_color_term = 239
+let g:indentLine_char = '·'
+
+
+"""""""""""""""""""
+"--- NERDTREE  ---"
+"""""""""""""""""""
+"map <C-n> :NERDTree <CR>
+"nmap <leader> Nt :NERDTree <CR>
+
+""""""""""""""""""""""""""""""
+"--- OTHER MINOR SETTINGS ---"
+""""""""""""""""""""""""""""""
 "convert every umlaut into HTML Format"
 function HtmlEscape()
   silent s/ö/\&ouml;/eg
@@ -72,45 +135,46 @@ autocmd Filetype python map <F5> :w <CR>:!python "%"<CR>
 "compile tex document"
 autocmd Filetype tex map <c-t> :w <CR> !!lualatex *.tex <CR>
 
-"""""""""""""""""""""""
-"--- !! VUNDLE !! --- "
-"""""""""""""""""""""""
-set rtp+=~/.vim/bundle/vundle
+"ignore fileendings in wildmenu
+set wildmode=list:longest
+set wildignore+=.hg,.git,.svn                    " Version control
+set wildignore+=*.aux,*.out,*.toc                " LaTeX intermediate files
+set wildignore+=*.jpg,*.bmp,*.gif,*.png,*.jpeg   " binary images
+set wildignore+=*.o,*.obj,*.exe,*.dll,*.manifest " compiled object files
+set wildignore+=*.spl                            " compiled spelling word lists
+set wildignore+=*.sw?                            " Vim swap files
+set wildignore+=*.DS_Store                       " OSX bullshit
+set wildignore+=*.luac                           " Lua byte code
+set wildignore+=migrations                       " Django migrations
+set wildignore+=*.pyc                            " Python byte code
 
-call vundle#begin()
-  Bundle 'gmarik/vundle'
-  Bundle 'shougo/neocomplete'
-  Bundle 'bling/vim-airline'
-  Bundle 'sjl/gundo.vim'
-  Bundle 'tpope/vim-fugitive'
-  Bundle 'scrooloose/syntastic'
-call vundle#end()
+"Sudo to write
+ cnoremap w!! w !sudo tee % >/dev/null
 
-filetype plugin indent on
+"return to the same line if reopen a file"
+"props to steve losh
+augroup line_return
+  au!
+    au BufReadPost *
+      \ if line("'\"") > 0 && line("'\"") <= line("$") |
+      \     execute 'normal! g`"zvzz' |
+      \ endif
+augroup END
 
-""""""""""""""""""
-"--- AIRLINE  ---"
-""""""""""""""""""
-source ~/.vim/configs/airline.vim
+"Copying text to the system clipboard.
+"For some reason Vim no longer wants to talk to the OS X pasteboard through
+"Computers are bullshit.
+"props to steve losh. again.
+function! g:FuckingCopyTheTextPlease()
+  let old_z = @z
+  normal! gv"zy
+  call system('pbcopy', @z)
+  let @z = old_z
+endfunction
+noremap <leader>p :silent! set paste<CR>"*p:set nopaste<CR>
+" noremap <leader>p mz:r!pbpaste<cr>`z
+vnoremap <leader>y :<c-u>call g:FuckingCopyTheTextPlease()<cr>
+nnoremap <leader>y VV:<c-u>call g:FuckingCopyTheTextPlease()<cr>
 
-"""""""""""""""""""""
-"--- NEOCOMPLETE ---"
-"""""""""""""""""""""
-source ~/.vim/configs/neocomplete.vim
 
-"""""""""""""""""""
-"--- SYNTASTIC ---"
-"""""""""""""""""""
 
-"""""""""""""""""""
-"--- NERDTREE  ---"
-"""""""""""""""""""
-map <C-n> :NERDTree <CR>
-nmap <leader> Nt :NERDTree <CR>
-
-let NERDTreeShowBookmarks=1
-let NERDTreeIgnore=['\.pyc', '\~$', '\.swo$', '\.swp$', '\.git', '\.hg', '\.svn', '\.bzr']
-let NERDTreeChDirMode=0
-let NERDTreeQuitOnOpen=1
-let NERDTreeShowHidden=1
-let NERDTreeKeepTreeInNewTab=1
