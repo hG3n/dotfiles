@@ -1,3 +1,24 @@
+"""""""""""""""""""""""
+"--- !! VUNDLE !! --- "
+"""""""""""""""""""""""
+set nocompatible
+filetype off
+set rtp+=~/.vim/bundle/vundle
+
+call vundle#begin()
+  Plugin 'gmarik/vundle'
+  Plugin 'shougo/neocomplete'
+  Plugin 'bling/vim-airline'
+  Plugin 'sjl/gundo.vim'
+  Plugin 'tpope/vim-fugitive'
+  Plugin 'scrooloose/syntastic'
+  Plugin 'Yggdroot/indentLine'
+  Plugin 'vim-scripts/SearchComplete'
+  Plugin 'scrooloose/nerdtree'
+call vundle#end()
+
+filetype plugin indent on
+
 """""""""""""""""""""""""""
 "--- GENERAL  SETTINGS ---"
 """""""""""""""""""""""""""
@@ -7,7 +28,6 @@ set fileencoding=utf-8
 set fileencodings=ucs-bom,utf8,prc
 
 set backspace=indent,eol,start "in case bcksp isnt working well"
-set nocompatible        "changes options as as sideeffect"
 set shiftwidth=2
 set softtabstop=2       "set Tabvalue=4"dd
 set ruler               "always show actual position" 
@@ -20,6 +40,7 @@ set title               "sets filename on top of the open window"
 set wildmenu            "sets the autocomplete in commandline"
 set showmode            "shows the actual mode"
 set mouse=a             "enables Mouse in vim"
+set clipboard=unnamed   "use the system clipboard for copying and pasting
 
 set showcmd             "show partial commands in status line and
                         "selected characters/lines in visual mode"
@@ -28,7 +49,7 @@ set incsearch           "find as you type search"
 set hlsearch            "highlights searched objects"
 
 set expandtab                       "set tabs to spaces
-"set list listchars=tab:-\ \,trail:· "set points after
+set list listchars=tab:-\ \,trail:· "set points after
 let mapleader = ","                 "creates mapleader do do more key combinations
 let g:mapleader = ","
 
@@ -63,25 +84,6 @@ cmap ww     w!
 nnoremap Y y$
 
 """""""""""""""""""""""
-"--- !! VUNDLE !! --- "
-"""""""""""""""""""""""
-set rtp+=~/.vim/bundle/vundle
-
-call vundle#begin()
-  Plugin 'gmarik/vundle'
-  Plugin 'shougo/neocomplete'
-  Plugin 'bling/vim-airline'
-  Plugin 'sjl/gundo.vim'
-  Plugin 'tpope/vim-fugitive'
-  Plugin 'scrooloose/syntastic'
-  Plugin 'Yggdroot/indentLine'
-  Plugin 'vim-scripts/SearchComplete'
-  Plugin 'scrooloose/nerdtree'
-call vundle#end()
-
-filetype plugin indent on
-
-"""""""""""""""""""""""
 "--- CONFIG FILES  ---"
 """""""""""""""""""""""
 " using external files to keep an overview on that file
@@ -107,7 +109,6 @@ let g:syntastic_check_on_wq = 0
 let g:indentLine_color_term = 239
 let g:indentLine_char = '·'
 
-
 """""""""""""""""""
 "--- NERDTREE  ---"
 """""""""""""""""""
@@ -118,6 +119,7 @@ let g:indentLine_char = '·'
 "--- OTHER MINOR SETTINGS ---"
 """"""""""""""""""""""""""""""
 "convert every umlaut into HTML Format"
+"because fuck you HTML
 function HtmlEscape()
   silent s/ö/\&ouml;/eg
   silent s/ä/\&auml;/eg
@@ -152,7 +154,6 @@ set wildignore+=*.pyc                            " Python byte code
  cnoremap w!! w !sudo tee % >/dev/null
 
 "return to the same line if reopen a file"
-"props to steve losh
 augroup line_return
   au!
     au BufReadPost *
@@ -161,20 +162,10 @@ augroup line_return
       \ endif
 augroup END
 
-"Copying text to the system clipboard.
-"For some reason Vim no longer wants to talk to the OS X pasteboard through
-"Computers are bullshit.
-"props to steve losh. again.
-function! g:FuckingCopyTheTextPlease()
-  let old_z = @z
-  normal! gv"zy
-  call system('pbcopy', @z)
-  let @z = old_z
-endfunction
-noremap <leader>p :silent! set paste<CR>"*p:set nopaste<CR>
-" noremap <leader>p mz:r!pbpaste<cr>`z
-vnoremap <leader>y :<c-u>call g:FuckingCopyTheTextPlease()<cr>
-nnoremap <leader>y VV:<c-u>call g:FuckingCopyTheTextPlease()<cr>
-
-
+"automatically add shebang in the first line of the file
+augroup Shebang
+  autocmd BufNewFile *.py 0put =\"#!/usr/bin/env python\<nl>\"|$
+  autocmd BufNewFile *.zsh 0put =\"#!/bin/bash <nl>\"|$
+  autocmd BufNewFile *.sh 0put =\"#!/bin/bash <nl>\"|$
+augroup END
 
